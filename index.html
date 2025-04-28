@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapay Zeka Öneri Testi</title>
+    <style>
+        body {font-family:Arial,sans-serif; max-width:800px; margin:0 auto; padding:20px; background:#f5f5f5;}
+        .container {background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+        .question-container {display:none;}
+        .active {display:block;}
+        .progress-bar {background:#e0e0e0; height:10px; border-radius:5px; margin:20px 0;}
+        .progress {background:#4CAF50; height:10px; border-radius:5px; width:0%; transition:width 0.3s;}
+        .btn-container {display:flex; justify-content:space-between; margin-top:30px;}
+        button {padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px;}
+        button:hover {background:#45a049;}
+        button:disabled {background:#ccc; cursor:not-allowed;}
+        .option {display:block; margin:10px 0; padding:10px; border:1px solid #ddd; border-radius:5px; cursor:pointer;}
+        .option:hover {background:#f0f0f0;}
+        .option.selected {background:#e7f3e8; border-color:#4CAF50;}
+        .result {display:none;}
+        h1,h2,h3,h4 {color:#333;}
+        .question-number {font-weight:bold; color:#4CAF50; margin-bottom:15px;}
+        .result-model {margin:25px 0; padding:20px; border:1px solid #ddd; border-radius:10px; background:#f9f9f9;}
+        #restart-test {margin-top:20px; display:block; width:100%;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yapay Zeka Öneri Testi</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div id="question1" class="question-container active">
+            <div class="question-number">Soru 1/6</div>
+            <h2>Yapay zekayı öncelikli olarak hangi alanda kullanmak istiyorsunuz?</h2>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'q1', 'content')">İçerik üretimi ve yazı yazma</div>
+                <div class="option" onclick="selectOption(this, 'q1', 'visual')">Görsel tasarım ve yaratıcılık</div>
+                <div class="option" onclick="selectOption(this, 'q1', 'data')">Veri analizi ve iş zekası</div>
+                <div class="option" onclick="selectOption(this, 'q1', 'automation')">İş süreçlerini otomatikleştirme</div>
+                <div class="option" onclick="selectOption(this, 'q1', 'personal')">Kişisel asistan ve günlük görevler</div>
+            </div>
+        </div>
+
+        <div id="question2" class="question-container">
+            <div class="question-number">Soru 2/6</div>
+            <h2>Kendinizi hangi kullanıcı seviyesinde görüyorsunuz?</h2>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'q2', 'beginner')">Başlangıç - Temel bilgisayar kullanabiliyorum</div>
+                <div class="option" onclick="selectOption(this, 'q2', 'intermediate')">Orta - Dijital araçlara hakimim</div>
+                <div class="option" onclick="selectOption(this, 'q2', 'advanced')">İleri - Teknik bilgim var ve öğrenmeye açığım</div>
+                <div class="option" onclick="selectOption(this, 'q2', 'expert')">Uzman - Programlama veya veri analizi deneyimim var</div>
+            </div>
+        </div>
+
+        <div id="question3" class="question-container">
+            <div class="question-number">Soru 3/6</div>
+            <h2>Yapay zekayı hangi sıklıkta kullanmayı planlıyorsunuz?</h2>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'q3', 'rarely')">Nadiren (ayda birkaç kez)</div>
+                <div class="option" onclick="selectOption(this, 'q3', 'sometimes')">Ara sıra (haftada birkaç kez)</div>
+                <div class="option" onclick="selectOption(this, 'q3', 'often')">Sık sık (günlük olarak)</div>
+                <div class="option" onclick="selectOption(this, 'q3', 'constantly')">Sürekli (günde birçok kez)</div>
+            </div>
+        </div>
+
+        <div id="question4" class="question-container">
+            <div class="question-number">Soru 4/6</div>
+            <h2>Yapay zeka için ayırabileceğiniz bütçe nedir?</h2>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'q4', 'free')">Sadece ücretsiz çözümler</div>
+                <div class="option" onclick="selectOption(this, 'q4', 'low')">Aylık 10-20 USD</div>
+                <div class="option" onclick="selectOption(this, 'q4', 'medium')">Aylık 20-50 USD</div>
+                <div class="option" onclick="selectOption(this, 'q4', 'high')">Aylık 50 USD üzeri</div>
+            </div>
+        </div>
+
+        <div id="question5" class="question-container">
+            <div class="question-number">Soru 5/6</div>
+            <h2>Yapay zeka ile ürettiğiniz içerikleri hangi amaçla kullanacaksınız?</h2>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'q5', 'personal')">Kişisel kullanım</div>
+                <div class="option" onclick="selectOption(this, 'q5', 'education')">Eğitim ve öğrenim</div>
+                <div class="option" onclick="selectOption(this, 'q5', 'business')">İş ve profesyonel amaçlar</div>
+                <div class="option" onclick="selectOption(this, 'q5', 'creative')">Yaratıcı projeler ve hobi</div>
+            </div>
+        </div>
+
+        <div id="question6" class="question-container">
+            <div class="question-number">Soru 6/6</div>
+            <h2>Tercih ettiğiniz cihaz türü nedir?</h2>
+            <div class="options">
+                <div class="option" onclick="selectOption(this, 'q6', 'mobile')">Mobil cihazlar (telefon, tablet)</div>
+                <div class="option" onclick="selectOption(this, 'q6', 'laptop')">Dizüstü bilgisayar</div>
+                <div class="option" onclick="selectOption(this, 'q6', 'desktop')">Masaüstü bilgisayar</div>
+                <div class="option" onclick="selectOption(this, 'q6', 'all')">Tüm platformlar</div>
+            </div>
+        </div>
+
+        <div id="result" class="result">
+            <h2>Yapay Zeka Öneriniz Hazır!</h2>
+            <p>Cevaplarınıza göre size en uygun yapay zeka modelleri:</p>
+            
+            <div class="result-model">
+                <h3>Birincil Önerimiz: <span id="primary-model"></span></h3>
+                <p id="primary-description"></p>
+                <div class="usage-suggestions">
+                    <h4>Kullanım Önerileri:</h4>
+                    <ul id="primary-uses"></ul>
+                </div>
+            </div>
+            
+            <div class="result-model">
+                <h3>Alternatif Önerimiz: <span id="secondary-model"></span></h3>
+                <p id="secondary-description"></p>
+                <div class="usage-suggestions">
+                    <h4>Kullanım Önerileri:</h4>
+                    <ul id="secondary-uses"></ul>
+                </div>
+            </div>
+            
+            <button onclick="restartTest()" id="restart-test">Testi Yeniden Başlat</button>
+        </div>
+
+        <div class="btn-container">
+            <button id="prevBtn" onclick="prevQuestion()" disabled>Önceki Soru</button>
+            <button id="nextBtn" onclick="nextQuestion()" disabled>Sonraki Soru</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 6;
+        const answers = {};
+        
+        // AI önerileri veritabanı
+        const aiRecommendations = {
+            content: {
+                lowBudget: {
+                    primary: {
+                        name: "ChatGPT (Ücretsiz Sürüm)",
+                        desc: "OpenAI'ın yapay zeka dil modeli, metin içeriği oluşturma ve düzenleme için ideal.",
+                        uses: ["Blog yazıları ve sosyal medya içerikleri", "Metin düzeltme ve özetleme", "Fikir ve taslak oluşturma"]
+                    },
+                    secondary: {
+                        name: "Bing Copilot",
+                        desc: "Microsoft'un ücretsiz AI asistanı, internet araştırması ile destekli içerik üretir.",
+                        uses: ["Güncel bilgilerle zenginleştirilmiş içerik", "Araştırma destekli yazılar", "Hızlı ve pratik metin oluşturma"]
+                    }
+                },
+                highBudget: {
+                    primary: {
+                        name: "Claude 3 Opus",
+                        desc: "Anthropic'in en gelişmiş dil modeli, uzun ve karmaşık metinler için mükemmel.",
+                        uses: ["Profesyonel içerik geliştirme", "Derinlemesine araştırma yazıları", "Akademik ve teknik metin üretimi"]
+                    },
+                    secondary: {
+                        name: "GPT-4o",
+                        desc: "OpenAI'ın son teknoloji çok modlu modeli, yaratıcı içerik geliştirmeye uygundur.",
+                        uses: ["Multimedya içerik oluşturma", "Yaratıcı ve ikna edici metinler", "SEO odaklı pazarlama içerikleri"]
+                    }
+                }
+            },
+            visual: {
+                lowBudget: {
+                    primary: {
+                        name: "Leonardo.ai (Ücretsiz Katman)",
+                        desc: "Çeşitli görsel stillerde içerik üretebilen AI görsel üreticisi.",
+                        uses: ["Sosyal medya görselleri", "Basit konsept tasarımlar", "İllüstrasyon ve karakterler"]
+                    },
+                    secondary: {
+                        name: "Canva AI",
+                        desc: "Kullanımı kolay tasarım platformu, AI destekli görsel üretim araçları sunar.",
+                        uses: ["Sunum ve poster tasarımları", "Grafik düzenleme ve iyileştirme", "Şablonlarla hızlı tasarım"]
+                    }
+                },
+                highBudget: {
+                    primary: {
+                        name: "Midjourney V6",
+                        desc: "Fotoğraf gerçekliğinde ve sanatsal görseller üreten ileri düzey AI sistemi.",
+                        uses: ["Yüksek kaliteli illüstrasyonlar", "Gerçekçi ürün konseptleri", "Profesyonel pazarlama görselleri"]
+                    },
+                    secondary: {
+                        name: "DALL-E 3",
+                        desc: "OpenAI'ın gelişmiş görsel üretim modeli, ayrıntılı ve özelleştirilebilir.",
+                        uses: ["Detaylı ve özel konsept tasarımlar", "Farklı sanatsal stiller", "Kompleks sahneler ve kompozisyonlar"]
+                    }
+                }
+            },
+            data: {
+                lowBudget: {
+                    primary: {
+                        name: "Python + Scikit-learn",
+                        desc: "Açık kaynaklı veri analizi ve makine öğrenimi kütüphaneleri.",
+                        uses: ["Veri analizi ve görselleştirme", "Öngörücü modeller geliştirme", "Veri temizleme ve hazırlama"]
+                    },
+                    secondary: {
+                        name: "Google Colab",
+                        desc: "Ücretsiz bulut tabanlı Jupyter notebook ortamı, Python ve veri analizi için.",
+                        uses: ["GPU destekli analizler", "Paylaşılabilir veri projeleri", "Makine öğrenimi deneyleri"]
+                    }
+                },
+                highBudget: {
+                    primary: {
+                        name: "DataRobot",
+                        desc: "Otomatik makine öğrenmesi platformu, karmaşık veri modelleri için.",
+                        uses: ["İleri düzey tahmin modelleri", "Tam otomatik model eğitimi", "İş kararları için veri analizi"]
+                    },
+                    secondary: {
+                        name: "Microsoft Fabric",
+                        desc: "Microsoft'un tümleşik veri ve AI platformu, iş analitiği için ideal.",
+                        uses: ["Büyük veri işleme", "Gerçek zamanlı analizler", "Kurumsal düzeyde veri çözümleri"]
+                    }
+                }
+            },
+            automation: {
+                lowBudget: {
+                    primary: {
+                        name: "n8n",
+                        desc: "Açık kaynaklı iş akışı otomasyon platformu, kendine ait sunucuda çalıştırılabilir.",
+                        uses: ["Web hizmetleri arası otomasyon", "Özelleştirilebilir iş akışları", "Temel veri işleme"]
+                    },
+                    secondary: {
+                        name: "Make (Integromat)",
+                        desc: "Görsel otomasyon platformu, farklı hizmetleri birbirine bağlar.",
+                        uses: ["Sürükle-bırak otomasyon", "Uygulama entegrasyonları", "Basit tetikleyiciler ve eylemler"]
+                    }
+                },
+                highBudget: {
+                    primary: {
+                        name: "UiPath",
+                        desc: "Kurumsal düzeyde RPA (Robotik Süreç Otomasyonu) platformu.",
+                        uses: ["Kompleks iş süreçleri otomasyonu", "AI destekli karar verme", "Belge işleme ve analiz"]
+                    },
+                    secondary: {
+                        name: "Microsoft Power Automate",
+                        desc: "Microsoft ekosistemine entegre iş akışı otomasyon platformu.",
+                        uses: ["Office 365 entegrasyonu", "Düşük kodlu geliştirme", "Masaüstü ve bulut otomasyon"]
+                    }
+                }
+            },
+            personal: {
+                lowBudget: {
+                    primary: {
+                        name: "Google Gemini (Ücretsiz Sürüm)",
+                        desc: "Google'ın çok modlu AI asistanı, günlük görevler için kullanışlı.",
+                        uses: ["Araştırma ve bilgi edinme", "Çoklu ortam anlama", "Kişisel organizasyon"]
+                    },
+                    secondary: {
+                        name: "Notion AI (Sınırlı Sürüm)",
+                        desc: "Not alma uygulamasıyla entegre AI asistanı.",
+                        uses: ["İçerik özetleme", "Notları düzenleme", "Beyin fırtınası ve fikir geliştirme"]
+                    }
+                },
+                highBudget: {
+                    primary: {
+                        name: "Claude Pro",
+                        desc: "Anthropic'in gelişmiş AI asistanı, uzun sohbetler ve kapsamlı yardım sunar.",
+                        uses: ["Detaylı araştırma ve danışmanlık", "Proje planlaması", "Geniş içerik analizi"]
+                    },
+                    secondary: {
+                        name: "OpenAI ChatGPT Plus",
+                        desc: "GPT-4 destekli premium asistan, plugin entegrasyonu ile çok yönlü.",
+                        uses: ["Web araması ve taraması", "Özel araçlar ve eklentiler", "Görsel anlama"]
+                    }
+                }
+            }
+        };
+        
+        function selectOption(element, questionId, option) {
+            document.querySelectorAll(`#question${currentQuestion} .option`).forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            answers[questionId] = option;
+            document.getElementById('nextBtn').disabled = false;
+            updateProgressBar();
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                document.getElementById(`question${currentQuestion}`).classList.remove('active');
+                currentQuestion++;
+                document.getElementById(`question${currentQuestion}`).classList.add('active');
+                document.getElementById('nextBtn').disabled = !answers[`q${currentQuestion}`];
+                if (currentQuestion === totalQuestions) {
+                    document.getElementById('nextBtn').textContent = 'Sonuçları Göster';
+                }
+            } else if (answers[`q${currentQuestion}`]) {
+                showResults();
+            }
+            document.getElementById('prevBtn').disabled = false;
+        }
+        
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                document.getElementById(`question${currentQuestion}`).classList.remove('active');
+                currentQuestion--;
+                document.getElementById(`question${currentQuestion}`).classList.add('active');
+                document.getElementById('prevBtn').disabled = currentQuestion === 1;
+                document.getElementById('nextBtn').textContent = 'Sonraki Soru';
+                document.getElementById('nextBtn').disabled = !answers[`q${currentQuestion}`];
+            }
+        }
+        
+        function updateProgressBar() {
+            const answeredQuestions = Object.keys(answers).length;
+            document.getElementById('progress').style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
+        }
+        
+        function showResults() {
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById(`question${i}`).style.display = 'none';
+            }
+            document.querySelector('.btn-container').style.display = 'none';
+            
+            // Bütçe durumunu belirle
+            const budgetLevel = ['free', 'low'].includes(answers.q4) ? 'lowBudget' : 'highBudget';
+            
+            // Ana kategori önerisini al
+            const mainCategory = answers.q1;
+            const recommendations = aiRecommendations[mainCategory][budgetLevel];
+            
+            // Sonuçları göster
+            document.getElementById('primary-model').textContent = recommendations.primary.name;
+            document.getElementById('primary-description').textContent = recommendations.primary.desc;
+            
+            document.getElementById('secondary-model').textContent = recommendations.secondary.name;
+            document.getElementById('secondary-description').textContent = recommendations.secondary.desc;
+            
+            // Kullanım önerilerini ekle
+            const primaryUsesList = document.getElementById('primary-uses');
+            primaryUsesList.innerHTML = '';
+            recommendations.primary.uses.forEach(use => {
+                const li = document.createElement('li');
+                li.textContent = use;
+                primaryUsesList.appendChild(li);
+            });
+            
+            const secondaryUsesList = document.getElementById('secondary-uses');
+            secondaryUsesList.innerHTML = '';
+            recommendations.secondary.uses.forEach(use => {
+                const li = document.createElement('li');
+                li.textContent = use;
+                secondaryUsesList.appendChild(li);
+            });
+            
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        function restartTest() {
+            for (let key in answers) delete answers[key];
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('result').style.display = 'none';
+            
+            currentQuestion = 1;
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById(`question${i}`).style.display = 'none';
+                document.getElementById(`question${i}`).classList.remove('active');
+            }
+            
+            document.getElementById('question1').style.display = 'block';
+            document.getElementById('question1').classList.add('active');
+            document.querySelector('.btn-container').style.display = 'flex';
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').textContent = 'Sonraki Soru';
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('progress').style.width = '0%';
+        }
+        
+        window.onload = function() {
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+        };
+    </script>
+</body>
+</html>
