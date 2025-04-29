@@ -23,6 +23,22 @@
         .question-number {font-weight:bold; color:#4CAF50; margin-bottom:15px;}
         .result-model {margin:25px 0; padding:20px; border:1px solid #ddd; border-radius:10px; background:#f9f9f9;}
         #restart-test {margin-top:20px; display:block; width:100%;}
+        .follow-up-question {margin-top:15px; padding:15px; background:#f7fff7; border-left:4px solid #4CAF50; border-radius:4px;}
+        .text-input {width:100%; padding:10px; margin-top:10px; border:1px solid #ddd; border-radius:5px;}
+        .range-container {margin-top:15px; width:100%;}
+        .range-input {width:100%; margin-top:5px;}
+        .range-labels {display:flex; justify-content:space-between; margin-top:5px; font-size:12px; color:#666;}
+        .hidden {display:none;}
+        .tag-container {display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;}
+        .tag {background: #e7f3e8; border: 1px solid #4CAF50; border-radius: 15px; padding: 5px 10px; cursor: pointer;}
+        .tag.selected {background: #4CAF50; color: white;}
+        textarea {width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; min-height: 80px;}
+        .model-comparison {display: flex; margin-top: 20px; gap: 20px;}
+        .model-card {flex: 1; padding: 15px; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9;}
+        .model-feature {margin-top: 10px; display: flex; align-items: center;}
+        .feature-score {width: 50px; height: 10px; background: #e0e0e0; margin-left: 10px; border-radius: 5px; overflow: hidden;}
+        .score-fill {height: 100%; background: #4CAF50;}
+        .recommendation-badge {display: inline-block; background: #4CAF50; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; margin-left: 10px;}
     </style>
 </head>
 <body>
@@ -32,6 +48,7 @@
             <div class="progress" id="progress"></div>
         </div>
         
+        <!-- Ana Sorular -->
         <div id="question1" class="question-container active">
             <div class="question-number">Soru 1/6</div>
             <h2>Yapay zekayı öncelikli olarak hangi alanda kullanmak istiyorsunuz?</h2>
@@ -41,6 +58,68 @@
                 <div class="option" onclick="selectOption(this, 'q1', 'data')">Veri analizi ve iş zekası</div>
                 <div class="option" onclick="selectOption(this, 'q1', 'automation')">İş süreçlerini otomatikleştirme</div>
                 <div class="option" onclick="selectOption(this, 'q1', 'personal')">Kişisel asistan ve günlük görevler</div>
+            </div>
+            <!-- İçerik üretimi için takip sorusu -->
+            <div id="follow-up-content" class="follow-up-question hidden">
+                <h3>Hangi tür içerik üretimi ile ilgileniyorsunuz?</h3>
+                <div class="tag-container" id="content-tags">
+                    <div class="tag" onclick="toggleTag(this, 'content-type', 'blog')">Blog Yazıları</div>
+                    <div class="tag" onclick="toggleTag(this, 'content-type', 'social')">Sosyal Medya İçerikleri</div>
+                    <div class="tag" onclick="toggleTag(this, 'content-type', 'academic')">Akademik İçerik</div>
+                    <div class="tag" onclick="toggleTag(this, 'content-type', 'marketing')">Pazarlama Metinleri</div>
+                    <div class="tag" onclick="toggleTag(this, 'content-type', 'technical')">Teknik Yazılar</div>
+                </div>
+                <textarea id="content-details" placeholder="İçerik ihtiyaçlarınızla ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
+            
+            <!-- Görsel tasarım için takip sorusu -->
+            <div id="follow-up-visual" class="follow-up-question hidden">
+                <h3>Ne tür görsel içerikler oluşturmak istiyorsunuz?</h3>
+                <div class="tag-container" id="visual-tags">
+                    <div class="tag" onclick="toggleTag(this, 'visual-type', 'realistic')">Gerçekçi Görseller</div>
+                    <div class="tag" onclick="toggleTag(this, 'visual-type', 'artistic')">Sanatsal İllüstrasyonlar</div>
+                    <div class="tag" onclick="toggleTag(this, 'visual-type', 'product')">Ürün Görselleri</div>
+                    <div class="tag" onclick="toggleTag(this, 'visual-type', 'ui')">UI/UX Tasarımları</div>
+                    <div class="tag" onclick="toggleTag(this, 'visual-type', 'logo')">Logo ve Marka Öğeleri</div>
+                </div>
+                <textarea id="visual-details" placeholder="Görsel ihtiyaçlarınızla ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
+            
+            <!-- Veri analizi için takip sorusu -->
+            <div id="follow-up-data" class="follow-up-question hidden">
+                <h3>Hangi tür verilerle çalışıyorsunuz?</h3>
+                <div class="tag-container" id="data-tags">
+                    <div class="tag" onclick="toggleTag(this, 'data-type', 'structured')">Yapılandırılmış Veriler (Tablolar)</div>
+                    <div class="tag" onclick="toggleTag(this, 'data-type', 'unstructured')">Yapılandırılmamış Veriler (Metin, Görsel)</div>
+                    <div class="tag" onclick="toggleTag(this, 'data-type', 'time-series')">Zaman Serisi Verileri</div>
+                    <div class="tag" onclick="toggleTag(this, 'data-type', 'big-data')">Büyük Veri</div>
+                </div>
+                <textarea id="data-details" placeholder="Veri analizi ihtiyaçlarınızla ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
+            
+            <!-- Otomasyon için takip sorusu -->
+            <div id="follow-up-automation" class="follow-up-question hidden">
+                <h3>Hangi iş süreçlerini otomatikleştirmek istiyorsunuz?</h3>
+                <div class="tag-container" id="automation-tags">
+                    <div class="tag" onclick="toggleTag(this, 'automation-type', 'customer')">Müşteri Hizmetleri</div>
+                    <div class="tag" onclick="toggleTag(this, 'automation-type', 'doc-processing')">Belge İşleme</div>
+                    <div class="tag" onclick="toggleTag(this, 'automation-type', 'reporting')">Raporlama</div>
+                    <div class="tag" onclick="toggleTag(this, 'automation-type', 'hr')">İK Süreçleri</div>
+                    <div class="tag" onclick="toggleTag(this, 'automation-type', 'marketing')">Pazarlama Otomasyonu</div>
+                </div>
+                <textarea id="automation-details" placeholder="Otomasyon ihtiyaçlarınızla ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
+            
+            <!-- Kişisel asistan için takip sorusu -->
+            <div id="follow-up-personal" class="follow-up-question hidden">
+                <h3>Kişisel asistanınızdan öncelikli olarak hangi konularda yardım almak istiyorsunuz?</h3>
+                <div class="tag-container" id="personal-tags">
+                    <div class="tag" onclick="toggleTag(this, 'personal-type', 'productivity')">Verimlilik ve Organizasyon</div>
+                    <div class="tag" onclick="toggleTag(this, 'personal-type', 'learning')">Öğrenme ve Eğitim</div>
+                    <div class="tag" onclick="toggleTag(this, 'personal-type', 'planning')">Planlama ve Takvim</div>
+                    <div class="tag" onclick="toggleTag(this, 'personal-type', 'research')">Araştırma ve Bilgi Edinme</div>
+                </div>
+                <textarea id="personal-details" placeholder="Kişisel asistan ihtiyaçlarınızla ilgili detayları buraya yazabilirsiniz..."></textarea>
             </div>
         </div>
 
@@ -53,6 +132,20 @@
                 <div class="option" onclick="selectOption(this, 'q2', 'advanced')">İleri - Teknik bilgim var ve öğrenmeye açığım</div>
                 <div class="option" onclick="selectOption(this, 'q2', 'expert')">Uzman - Programlama veya veri analizi deneyimim var</div>
             </div>
+            
+            <!-- Kullanıcı seviyesine göre takip sorusu -->
+            <div id="follow-up-expertise" class="follow-up-question hidden">
+                <h3>Ne kadar teknik detayla ilgilenmek istersiniz?</h3>
+                <div class="range-container">
+                    <input type="range" min="1" max="5" value="3" class="range-input" id="technical-comfort">
+                    <div class="range-labels">
+                        <span>Kullanımı kolay</span>
+                        <span>Orta düzey</span>
+                        <span>Tam kontrol</span>
+                    </div>
+                </div>
+                <textarea id="expertise-details" placeholder="Teknik tercihleriniz ve öğrenme hedeflerinizle ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
         </div>
 
         <div id="question3" class="question-container">
@@ -63,6 +156,18 @@
                 <div class="option" onclick="selectOption(this, 'q3', 'sometimes')">Ara sıra (haftada birkaç kez)</div>
                 <div class="option" onclick="selectOption(this, 'q3', 'often')">Sık sık (günlük olarak)</div>
                 <div class="option" onclick="selectOption(this, 'q3', 'constantly')">Sürekli (günde birçok kez)</div>
+            </div>
+            
+            <!-- Kullanım sıklığına göre takip sorusu -->
+            <div id="follow-up-usage" class="follow-up-question hidden">
+                <h3>Yapay zeka kullanımınızı nasıl gerçekleştirmeyi planlıyorsunuz?</h3>
+                <div class="tag-container" id="usage-tags">
+                    <div class="tag" onclick="toggleTag(this, 'usage-type', 'scheduled')">Belirli Zamanlarda</div>
+                    <div class="tag" onclick="toggleTag(this, 'usage-type', 'continuous')">Sürekli Erişim</div>
+                    <div class="tag" onclick="toggleTag(this, 'usage-type', 'workflow')">İş Akışı İçinde</div>
+                    <div class="tag" onclick="toggleTag(this, 'usage-type', 'adhoc')">Anlık İhtiyaçlarda</div>
+                </div>
+                <textarea id="usage-details" placeholder="Kullanım alışkanlıklarınızla ilgili detayları buraya yazabilirsiniz..."></textarea>
             </div>
         </div>
 
@@ -75,6 +180,19 @@
                 <div class="option" onclick="selectOption(this, 'q4', 'medium')">Aylık 20-50 USD</div>
                 <div class="option" onclick="selectOption(this, 'q4', 'high')">Aylık 50 USD üzeri</div>
             </div>
+            
+            <!-- Bütçe seviyesine göre takip sorusu -->
+            <div id="follow-up-budget" class="follow-up-question hidden">
+                <h3>Bütçeniz için en önemli öncelikleriniz nelerdir?</h3>
+                <div class="tag-container" id="budget-tags">
+                    <div class="tag" onclick="toggleTag(this, 'budget-priority', 'performance')">Yüksek Performans</div>
+                    <div class="tag" onclick="toggleTag(this, 'budget-priority', 'features')">Çok Özellik</div>
+                    <div class="tag" onclick="toggleTag(this, 'budget-priority', 'ease')">Kullanım Kolaylığı</div>
+                    <div class="tag" onclick="toggleTag(this, 'budget-priority', 'support')">Teknik Destek</div>
+                    <div class="tag" onclick="toggleTag(this, 'budget-priority', 'integration')">Entegrasyon</div>
+                </div>
+                <textarea id="budget-details" placeholder="Bütçe ve önceliklerinizle ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
         </div>
 
         <div id="question5" class="question-container">
@@ -85,6 +203,19 @@
                 <div class="option" onclick="selectOption(this, 'q5', 'education')">Eğitim ve öğrenim</div>
                 <div class="option" onclick="selectOption(this, 'q5', 'business')">İş ve profesyonel amaçlar</div>
                 <div class="option" onclick="selectOption(this, 'q5', 'creative')">Yaratıcı projeler ve hobi</div>
+            </div>
+            
+            <!-- Kullanım amacına göre takip sorusu -->
+            <div id="follow-up-purpose" class="follow-up-question hidden">
+                <h3>Oluşturduğunuz içeriklerin kalitesi için en kritik faktör nedir?</h3>
+                <div class="tag-container" id="purpose-tags">
+                    <div class="tag" onclick="toggleTag(this, 'quality-priority', 'accuracy')">Doğruluk</div>
+                    <div class="tag" onclick="toggleTag(this, 'quality-priority', 'originality')">Özgünlük</div>
+                    <div class="tag" onclick="toggleTag(this, 'quality-priority', 'speed')">Hız</div>
+                    <div class="tag" onclick="toggleTag(this, 'quality-priority', 'detail')">Detay Seviyesi</div>
+                    <div class="tag" onclick="toggleTag(this, 'quality-priority', 'creativity')">Yaratıcılık</div>
+                </div>
+                <textarea id="purpose-details" placeholder="İçerik kalitesi beklentilerinizle ilgili detayları buraya yazabilirsiniz..."></textarea>
             </div>
         </div>
 
@@ -97,24 +228,119 @@
                 <div class="option" onclick="selectOption(this, 'q6', 'desktop')">Masaüstü bilgisayar</div>
                 <div class="option" onclick="selectOption(this, 'q6', 'all')">Tüm platformlar</div>
             </div>
+            
+            <!-- Cihaz türüne göre takip sorusu -->
+            <div id="follow-up-device" class="follow-up-question hidden">
+                <h3>Cihazınızın teknik özellikleri nasıl?</h3>
+                <div class="tag-container" id="device-tags">
+                    <div class="tag" onclick="toggleTag(this, 'device-spec', 'low')">Temel Düzey</div>
+                    <div class="tag" onclick="toggleTag(this, 'device-spec', 'medium')">Orta Düzey</div>
+                    <div class="tag" onclick="toggleTag(this, 'device-spec', 'high')">Yüksek Performanslı</div>
+                </div>
+                <div class="tag-container" id="os-tags">
+                    <div class="tag" onclick="toggleTag(this, 'os-type', 'windows')">Windows</div>
+                    <div class="tag" onclick="toggleTag(this, 'os-type', 'mac')">MacOS</div>
+                    <div class="tag" onclick="toggleTag(this, 'os-type', 'android')">Android</div>
+                    <div class="tag" onclick="toggleTag(this, 'os-type', 'ios')">iOS</div>
+                    <div class="tag" onclick="toggleTag(this, 'os-type', 'linux')">Linux</div>
+                </div>
+                <textarea id="device-details" placeholder="Cihaz özellikleriniz ve platformla ilgili detayları buraya yazabilirsiniz..."></textarea>
+            </div>
         </div>
 
         <div id="result" class="result">
             <h2>Yapay Zeka Öneriniz Hazır!</h2>
-            <p>Cevaplarınıza göre size en uygun yapay zeka modelleri:</p>
+            <p>Ayrıntılı cevaplarınız doğrultusunda size özel olarak seçilmiş yapay zeka modelleri:</p>
             
             <div class="result-model">
-                <h3>Birincil Önerimiz: <span id="primary-model"></span></h3>
+                <h3>Birincil Önerimiz: <span id="primary-model"></span> <span class="recommendation-badge">En Uygun</span></h3>
                 <p id="primary-description"></p>
+                
+                <div class="model-comparison">
+                    <div class="model-card">
+                        <h4>Performans Değerlendirmesi</h4>
+                        <div class="model-feature">
+                            <span>Kullanım Kolaylığı</span>
+                            <div class="feature-score">
+                                <div id="primary-ease" class="score-fill" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="model-feature">
+                            <span>Kalite</span>
+                            <div class="feature-score">
+                                <div id="primary-quality" class="score-fill" style="width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div class="model-feature">
+                            <span>Hız</span>
+                            <div class="feature-score">
+                                <div id="primary-speed" class="score-fill" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="model-feature">
+                            <span>Özelleştirme</span>
+                            <div class="feature-score">
+                                <div id="primary-custom" class="score-fill" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-card">
+                        <h4>Sizin İçin Önemi</h4>
+                        <p id="primary-match-reason"></p>
+                        <p id="primary-tech-fit"></p>
+                    </div>
+                </div>
+                
                 <div class="usage-suggestions">
                     <h4>Kullanım Önerileri:</h4>
                     <ul id="primary-uses"></ul>
+                </div>
+                
+                <div class="follow-up-tips">
+                    <h4>Daha Etkili Kullanım İçin İpuçları:</h4>
+                    <ul id="primary-tips"></ul>
                 </div>
             </div>
             
             <div class="result-model">
                 <h3>Alternatif Önerimiz: <span id="secondary-model"></span></h3>
                 <p id="secondary-description"></p>
+                
+                <div class="model-comparison">
+                    <div class="model-card">
+                        <h4>Performans Değerlendirmesi</h4>
+                        <div class="model-feature">
+                            <span>Kullanım Kolaylığı</span>
+                            <div class="feature-score">
+                                <div id="secondary-ease" class="score-fill" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                        <div class="model-feature">
+                            <span>Kalite</span>
+                            <div class="feature-score">
+                                <div id="secondary-quality" class="score-fill" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="model-feature">
+                            <span>Hız</span>
+                            <div class="feature-score">
+                                <div id="secondary-speed" class="score-fill" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="model-feature">
+                            <span>Özelleştirme</span>
+                            <div class="feature-score">
+                                <div id="secondary-custom" class="score-fill" style="width: 65%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-card">
+                        <h4>Ne Zaman Tercih Etmelisiniz?</h4>
+                        <p id="secondary-advantage"></p>
+                        <p id="secondary-comparison"></p>
+                    </div>
+                </div>
+                
                 <div class="usage-suggestions">
                     <h4>Kullanım Önerileri:</h4>
                     <ul id="secondary-uses"></ul>
@@ -132,8 +358,9 @@
 
     <script>
         let currentQuestion = 1;
-        const totalQuestions = 6;
+        const totalBaseQuestions = 6;
         const answers = {};
+        const followUpAnswers = {};
         
         // AI önerileri veritabanı
         const aiRecommendations = {
@@ -142,236 +369,595 @@
                     primary: {
                         name: "ChatGPT (Ücretsiz Sürüm)",
                         desc: "OpenAI'ın yapay zeka dil modeli, metin içeriği oluşturma ve düzenleme için ideal.",
-                        uses: ["Blog yazıları ve sosyal medya içerikleri", "Metin düzeltme ve özetleme", "Fikir ve taslak oluşturma"]
+                        uses: ["Blog yazıları ve sosyal medya içerikleri", "Metin düzeltme ve özetleme", "Fikir ve taslak oluşturma"],
+                        ease: 85,
+                        quality: 75,
+                        speed: 80,
+                        custom: 60,
+                        matchReason: "Ücretsiz olarak erişilebilir ve içerik üretimi için iyi bir başlangıç noktası sağlar.",
+                        techFit: "Web tarayıcı arayüzü sayesinde teknik bilgi gerektirmeden kolayca kullanılabilir.",
+                        tips: ["Daha detaylı talimatlar vermek, daha iyi sonuçlar almanızı sağlar.",
+                              "Üretilen içeriği her zaman kontrol etmek ve düzenlemek önemlidir.",
+                              "Güncel bilgiler için ek araştırma yapmanız gerekebilir."]
                     },
                     secondary: {
                         name: "Bing Copilot",
                         desc: "Microsoft'un ücretsiz AI asistanı, internet araştırması ile destekli içerik üretir.",
-                        uses: ["Güncel bilgilerle zenginleştirilmiş içerik", "Araştırma destekli yazılar", "Hızlı ve pratik metin oluşturma"]
+                        uses: ["Güncel bilgilerle zenginleştirilmiş içerik", "Araştırma destekli yazılar", "Hızlı ve pratik metin oluşturma"],
+                        ease: 90,
+                        quality: 70,
+                        speed: 85,
+                        custom: 55,
+                        advantage: "Güncel internet erişimi sayesinde daha güncel içerikler oluşturabilir.",
+                        comparison: "ChatGPT'ye göre daha az özelleştirilebilir ancak güncel bilgiler için daha iyi bir seçenek."
+                    },
+                    contentType: {
+                        blog: {
+                            primary: {
+                                tips: ["Blog yazılarında daha etkileyici başlıklar için 'Bana X konusunda 10 çarpıcı başlık önerisi ver' şeklinde istek gönderin.", 
+                                      "İçeriği zenginleştirmek için 'Bu konuyu destekleyen 5 istatistik ekle' gibi talimatlar verin.",
+                                      "Farklı ses tonları denemek için 'Bunu daha samimi/profesyonel/eğlenceli bir tonda yaz' isteklerini kullanın."]
+                            },
+                            secondary: {
+                                uses: ["Güncel istatistikler ve trendlerle blog içeriği oluşturma", "Rekabet araştırması yapma", "SEO odaklı içerik oluşturma"]
+                            }
+                        },
+                        social: {
+                            primary: {
+                                tips: ["Sosyal medya platformuna özel format belirtin: 'Instagram için 5 hashtag ile bir gönderi yaz'.",
+                                      "Hedef kitlenizi tanımlayın: 'X yaş grubu için teknoloji konusunda ilgi çekici paylaşım yaz'.",
+                                      "Görsel açıklamaları ekleyin: 'Bu paylaşıma eşlik edecek görsel şöyle olmalı...'."]
+                            },
+                            secondary: {
+                                uses: ["Güncel olaylarla ilgili hızlı içerik oluşturma", "Farklı sosyal medya platformları için içerik uyarlama", "Viral trendleri takip etme"]
+                            }
+                        }
+                        // Diğer içerik türleri...
                     }
                 },
                 highBudget: {
                     primary: {
-                        name: "Claude 3 Opus",
-                        desc: "Anthropic'in en gelişmiş dil modeli, uzun ve karmaşık metinler için mükemmel.",
-                        uses: ["Profesyonel içerik geliştirme", "Derinlemesine araştırma yazıları", "Akademik ve teknik metin üretimi"]
+                        name: "ChatGPT Plus (GPT-4)",
+                        desc: "GPT-4 ile çalışan premium yapay zeka, yüksek kaliteli içerik üretimi için gelişmiş özellikler sunar.",
+                        uses: ["Profesyonel içerik yazarlığı", "Detaylı ve kapsamlı analiz raporları", "Çeşitli ton ve stillerde yazı düzenleme"],
+                        ease: 85,
+                        quality: 95,
+                        speed: 85,
+                        custom: 80,
+                        matchReason: "Bütçeniz aylık aboneliği karşılayabilir ve içerik kalitesi önceliğiniz.",
+                        techFit: "Kullanım kolaylığı ile gelişmiş özellikleri bir arada sunan akıllı bir arayüz.",
+                        tips: ["Özel talimatlar ve örnek içerikler göndererek istediğiniz stili tam olarak belirtebilirsiniz.",
+                              "Detaylı geri bildirim vererek çıktıları adım adım mükemmelleştirebilirsiniz.",
+                              "Web tarayıcı uzantıları ile internetten bilgi toplayarak içeriği zenginleştirebilirsiniz."]
                     },
                     secondary: {
-                        name: "GPT-4o",
-                        desc: "OpenAI'ın son teknoloji çok modlu modeli, yaratıcı içerik geliştirmeye uygundur.",
-                        uses: ["Multimedya içerik oluşturma", "Yaratıcı ve ikna edici metinler", "SEO odaklı pazarlama içerikleri"]
+                        name: "Claude Pro",
+                        desc: "Anthropic'in yapay zekası, uzun metinler ve nuanslı içerik üretimi için mükemmel.",
+                        uses: ["Çok uzun içerik üretimi", "Detaylı talimatları hassasiyetle takip etme", "Düşünceli ve dengeli yazılar"],
+                        ease: 80,
+                        quality: 95,
+                        speed: 80,
+                        custom: 85,
+                        advantage: "Daha uzun yapılandırılmış içerik için ChatGPT'den daha iyi performans gösterir.",
+                        comparison: "Akademik yazılarda ve detaylı analizlerde üstün, günlük hızlı içerik ihtiyaçlarında ChatGPT daha pratik olabilir."
                     }
+                    // Diğer içerik türleri...
                 }
+                // Diğer bütçe seviyeleri...
             },
             visual: {
                 lowBudget: {
                     primary: {
-                        name: "Leonardo.ai (Ücretsiz Katman)",
-                        desc: "Çeşitli görsel stillerde içerik üretebilen AI görsel üreticisi.",
-                        uses: ["Sosyal medya görselleri", "Basit konsept tasarımlar", "İllüstrasyon ve karakterler"]
+                        name: "DALL-E Mini/Craiyon",
+                        desc: "Ücretsiz AI görsel oluşturma aracı, temel görsel ihtiyaçlar için uygundur.",
+                        uses: ["Basit konsept görselleri", "İlham almak için taslak görüntüler", "Sosyal medya paylaşımları"],
+                        ease: 95,
+                        quality: 65,
+                        speed: 60,
+                        custom: 40,
+                        matchReason: "Ücretsiz erişim ve basit arayüz ile temel görsel üretimi ihtiyaçlarınızı karşılar.",
+                        techFit: "Teknik bilgi gerektirmeden kolay kullanım sunar.",
+                        tips: ["Daha iyi sonuçlar için detaylı ve açık talimatlar verin.",
+                              "Birden fazla görsel üreterek en iyi sonucu seçebilirsiniz.",
+                              "Görselleri daha sonra düzenlemek için temel bir görsel editörü kullanın."]
                     },
                     secondary: {
-                        name: "Canva AI",
-                        desc: "Kullanımı kolay tasarım platformu, AI destekli görsel üretim araçları sunar.",
-                        uses: ["Sunum ve poster tasarımları", "Grafik düzenleme ve iyileştirme", "Şablonlarla hızlı tasarım"]
+                        name: "Canva (AI Özellikleri)",
+                        desc: "Temel AI özellikleri içeren tasarım platformu, ücretsiz sürümüyle kullanılabilir.",
+                        uses: ["Sosyal medya görselleri", "Basit tasarım düzenlemeleri", "Hazır şablonlar üzerinde AI ile kişiselleştirme"],
+                        ease: 90,
+                        quality: 75,
+                        speed: 85,
+                        custom: 65,
+                        advantage: "Hem AI görsel üretimi hem de kapsamlı tasarım araçları bir arada.",
+                        comparison: "DALL-E Mini'den daha düzenli ve profesyonel sonuçlar, ancak saf AI görsel üretiminde daha kısıtlı."
                     }
                 },
                 highBudget: {
                     primary: {
-                        name: "Midjourney V6",
-                        desc: "Fotoğraf gerçekliğinde ve sanatsal görseller üreten ileri düzey AI sistemi.",
-                        uses: ["Yüksek kaliteli illüstrasyonlar", "Gerçekçi ürün konseptleri", "Profesyonel pazarlama görselleri"]
+                        name: "Midjourney",
+                        desc: "Yüksek kaliteli ve sanatsal AI görsel oluşturma platformu, özellikle yaratıcı projeler için idealdir.",
+                        uses: ["Gerçekçi ve sanatsal görseller", "İllüstrasyonlar ve konsept tasarımlar", "Yüksek kaliteli pazarlama materyalleri"],
+                        ease: 75,
+                        quality: 95,
+                        speed: 80,
+                        custom: 85,
+                        matchReason: "Görsel kalitesi ve yaratıcılık odaklı yaklaşımınız için en uygun seçenek.",
+                        techFit: "Discord aracılığıyla kullanım biraz teknik bilgi gerektirebilir.",
+                        tips: ["--ar parametresiyle görsellerin en-boy oranını kontrol edebilirsiniz.",
+                              "Sanatçı isimleri ve stilleri belirterek sonuçları şekillendirebilirsiniz.",
+                              "Üretilen görselleri diğer kullanıcılardan gizlemek için DM modunu kullanın."]
                     },
                     secondary: {
                         name: "DALL-E 3",
-                        desc: "OpenAI'ın gelişmiş görsel üretim modeli, ayrıntılı ve özelleştirilebilir.",
-                        uses: ["Detaylı ve özel konsept tasarımlar", "Farklı sanatsal stiller", "Kompleks sahneler ve kompozisyonlar"]
+                        desc: "OpenAI'ın gelişmiş görsel üretim modeli, detaylı istekleri hassasiyetle işler.",
+                        uses: ["Gerçekçi ve detaylı görseller", "Metin ve görsel kombinasyonları", "Özel konsept çalışmaları"],
+                        ease: 90,
+                        quality: 90,
+                        speed: 85,
+                        custom: 80,
+                        advantage: "Midjourney'e göre metinden görsel oluşturmada daha doğru sonuçlar verir.",
+                        comparison: "Kullanımı daha kolay ancak bazı sanatsal nüanslarda Midjourney kadar esnek değil."
                     }
                 }
+                // Diğer bütçe seviyeleri...
             },
             data: {
                 lowBudget: {
                     primary: {
-                        name: "Python + Scikit-learn",
-                        desc: "Açık kaynaklı veri analizi ve makine öğrenimi kütüphaneleri.",
-                        uses: ["Veri analizi ve görselleştirme", "Öngörücü modeller geliştirme", "Veri temizleme ve hazırlama"]
+                        name: "ChatGPT (Ücretsiz Sürüm) + Google Sheets",
+                        desc: "Temel veri analizi için ChatGPT talimatları ve Google Sheets kombinasyonu.",
+                        uses: ["Veri yorumlama ve özetleme", "Basit formüller ve analizler", "Veri temizleme ve hazırlama"],
+                        ease: 70,
+                        quality: 65,
+                        speed: 60,
+                        custom: 55,
+                        matchReason: "Ücretsiz araçlarla veri analizi yapmanızı sağlar.",
+                        techFit: "Temel bilgisayar becerileriyle kullanılabilir, ileri düzey için daha fazla öğrenme gerektirir.",
+                        tips: ["ChatGPT'den Sheets formülleri ve veri analizi yaklaşımları için yardım alabilirsiniz.",
+                              "Analizleri adım adım isteyerek daha iyi sonuçlar elde edebilirsiniz.",
+                              "Karmaşık analizler için adım adım talimatlar isteyin."]
                     },
                     secondary: {
-                        name: "Google Colab",
-                        desc: "Ücretsiz bulut tabanlı Jupyter notebook ortamı, Python ve veri analizi için.",
-                        uses: ["GPU destekli analizler", "Paylaşılabilir veri projeleri", "Makine öğrenimi deneyleri"]
+                        name: "Python + Colab (Ücretsiz)",
+                        desc: "Google'ın ücretsiz bulut Python ortamı ve AI destekli kod asistanları ile veri analizi.",
+                        uses: ["İleri düzey veri analizi", "Veri görselleştirme", "Makine öğrenimi denemeleri"],
+                        ease: 50,
+                        quality: 85,
+                        speed: 70,
+                        custom: 90,
+                        advantage: "Daha güçlü ve özelleştirilebilir veri analizi imkanı.",
+                        comparison: "Teknik bilgi gerektirir ancak daha karmaşık analizler yapabilir."
                     }
                 },
                 highBudget: {
                     primary: {
-                        name: "DataRobot",
-                        desc: "Otomatik makine öğrenmesi platformu, karmaşık veri modelleri için.",
-                        uses: ["İleri düzey tahmin modelleri", "Tam otomatik model eğitimi", "İş kararları için veri analizi"]
+                        name: "Microsoft Power BI + AI",
+                        desc: "Kurumsal seviye analiz platformu, yapay zeka destekli özelliklerle donatılmış.",
+                        uses: ["İş zekası ve raporlama", "Veri görselleştirme ve dashboard oluşturma", "Otomatik içgörü çıkarma"],
+                        ease: 70,
+                        quality: 90,
+                        speed: 85,
+                        custom: 85,
+                        matchReason: "Profesyonel veri analizi ihtiyaçlarınız için kapsamlı ve güçlü bir çözüm.",
+                        techFit: "Orta düzey teknik bilgi gerektirir, eğitimle hızlı öğrenilebilir.",
+                        tips: ["Power BI'ın Q&A özelliği ile doğal dilde veri sorguları yapabilirsiniz.",
+                              "AI Insights ile otomatik trendler ve anomaliler tespit edebilirsiniz.",
+                              "PowerApps ile analiz çıktılarını uygulamalara dönüştürebilirsiniz."]
                     },
                     secondary: {
-                        name: "Microsoft Fabric",
-                        desc: "Microsoft'un tümleşik veri ve AI platformu, iş analitiği için ideal.",
-                        uses: ["Büyük veri işleme", "Gerçek zamanlı analizler", "Kurumsal düzeyde veri çözümleri"]
+                        name: "Tableau + AI Özellikleri",
+                        desc: "Sezgisel veri görselleştirme platformu, yapay zeka destekli analiz araçlarıyla.",
+                        uses: ["İnteraktif veri görselleştirmeleri", "İş zekası çözümleri", "Detaylı veri hikayesi anlatımı"],
+                        ease: 75,
+                        quality: 95,
+                        speed: 80,
+                        custom: 90,
+                        advantage: "Görselleştirme odaklı yaklaşım ve sezgisel arayüz.",
+                        comparison: "Power BI'a göre daha kolay öğrenilebilir, Microsoft ekosistemi entegrasyonu yoksa daha iyi bir seçenek."
                     }
                 }
+                // Diğer bütçe seviyeleri...
             },
             automation: {
                 lowBudget: {
                     primary: {
-                        name: "n8n",
-                        desc: "Açık kaynaklı iş akışı otomasyon platformu, kendine ait sunucuda çalıştırılabilir.",
-                        uses: ["Web hizmetleri arası otomasyon", "Özelleştirilebilir iş akışları", "Temel veri işleme"]
+                        name: "n8n.io (Ücretsiz Sürüm)",
+                        desc: "Açık kaynaklı iş akışı otomasyon platformu, geniş entegrasyon seçenekleri sunar.",
+                        uses: ["Basit iş süreçlerini otomatikleştirme", "Farklı uygulamalar arası veri aktarımı", "Zamanlanmış görevler"],
+                        ease: 65,
+                        quality: 80,
+                        speed: 75,
+                        custom: 85,
+                        matchReason: "Ücretsiz olarak sunulan kapsamlı otomasyon imkanları ve açık kaynak yapısı.",
+                        techFit: "Temel teknik bilgi gerektirir, görsel arayüz sayesinde kodlama gerekmez.",
+                        tips: ["İlk başta basit otomasyonlarla başlayıp karmaşıklığı kademeli olarak artırın.",
+                              "Topluluk tarafından paylaşılan hazır iş akışı şablonlarını kullanabilirsiniz.",
+                              "Webhook özelliğiyle web tabanlı olayları tetikleyebilirsiniz."]
                     },
                     secondary: {
-                        name: "Make (Integromat)",
-                        desc: "Görsel otomasyon platformu, farklı hizmetleri birbirine bağlar.",
-                        uses: ["Sürükle-bırak otomasyon", "Uygulama entegrasyonları", "Basit tetikleyiciler ve eylemler"]
+                        name: "Google App Script + ChatGPT",
+                        desc: "Google uygulamaları için ücretsiz otomasyon ve ChatGPT ile kod yardımı.",
+                        uses: ["Google Workspace otomasyonu", "Formlar ve e-tablolar arası veri akışı", "E-posta otomasyonu"],
+                        ease: 60,
+                        quality: 75,
+                        speed: 70,
+                        custom: 80,
+                        advantage: "Google ürünleriyle tam entegrasyon, kodlama yardımı için ChatGPT.",
+                        comparison: "Sadece Google ekosistemine odaklı, ancak bu alanda n8n'den daha kapsamlı."
                     }
                 },
                 highBudget: {
                     primary: {
-                        name: "UiPath",
-                        desc: "Kurumsal düzeyde RPA (Robotik Süreç Otomasyonu) platformu.",
-                        uses: ["Kompleks iş süreçleri otomasyonu", "AI destekli karar verme", "Belge işleme ve analiz"]
+                        name: "Zapier + AI Asistan",
+                        desc: "Popüler bulut otomasyon platformu, geniş uygulama entegrasyonları ve AI özellikleri.",
+                        uses: ["Uygulama entegrasyonları", "Karmaşık iş akışları", "Tetikleyici tabanlı otomasyonlar"],
+                        ease: 85,
+                        quality: 90,
+                        speed: 90,
+                        custom: 80,
+                        matchReason: "Kolay kullanım, geniş entegrasyon seçenekleri ve teknik bilgi gerektirmemesi.",
+                        techFit: "Teknik bilgi gerekmez, basit arayüz ile karmaşık otomasyonlar oluşturulabilir.",
+                        tips: ["Çok adımlı Zap'lar oluşturarak karmaşık süreçleri otomatikleştirebilirsiniz.",
+                              "Filtreler kullanarak koşullu otomasyonlar oluşturun.",
+                              "Yapay zeka tabanlı içerik oluşturma görevlerini entegre edin."]
                     },
                     secondary: {
                         name: "Microsoft Power Automate",
-                        desc: "Microsoft ekosistemine entegre iş akışı otomasyon platformu.",
-                        uses: ["Office 365 entegrasyonu", "Düşük kodlu geliştirme", "Masaüstü ve bulut otomasyon"]
+                        desc: "Microsoft ekosistemiyle tam entegre otomasyon platformu, AI Builder özellikleri ile güçlendirilmiş.",
+                        uses: ["Office 365 uygulamaları otomasyonu", "Belge işleme ve veri çıkarma", "RPA (Robotik Süreç Otomasyonu)"],
+                        ease: 75,
+                        quality: 90,
+                        speed: 85,
+                        custom: 85,
+                        advantage: "Microsoft ürünleriyle derin entegrasyon ve masaüstü uygulama otomasyonu.",
+                        comparison: "Microsoft ürünleri kullanıyorsanız daha etkili, diğer durumlarda Zapier daha esnek."
                     }
                 }
+                // Diğer bütçe seviyeleri...
             },
             personal: {
                 lowBudget: {
                     primary: {
-                        name: "Google Gemini (Ücretsiz Sürüm)",
-                        desc: "Google'ın çok modlu AI asistanı, günlük görevler için kullanışlı.",
-                        uses: ["Araştırma ve bilgi edinme", "Çoklu ortam anlama", "Kişisel organizasyon"]
+                        name: "Bing Copilot",
+                        desc: "Microsoft'un yapay zeka asistanı, güncel internet erişimi ile kişisel asistan görevleri için idealdir.",
+                        uses: ["Bilgi arama ve güncel sorular", "Planlama yardımı", "Kişiselleştirilmiş öneriler"],
+                        ease: 95,
+                        quality: 80,
+                        speed: 85,
+                        custom: 60,
+                        matchReason: "Ücretsiz, güncel bilgiye erişim ve kişisel asistanlık için yeterli özellikler.",
+                        techFit: "Teknik bilgi gerektirmeden, tarayıcı üzerinden kolay erişim.",
+                        tips: ["Arama motoruyla entegre olduğu için araştırma gerektiren sorularda daha etkili.",
+                              "Seyahat planlaması, alışveriş karşılaştırmaları gibi güncel bilgi gerektiren konularda kullanın.",
+                              "Edge tarayıcısında yan panel olarak kullanarak web gezinirken yardım alabilirsiniz."]
                     },
                     secondary: {
-                        name: "Notion AI (Sınırlı Sürüm)",
-                        desc: "Not alma uygulamasıyla entegre AI asistanı.",
-                        uses: ["İçerik özetleme", "Notları düzenleme", "Beyin fırtınası ve fikir geliştirme"]
+                        name: "ChatGPT (Ücretsiz Sürüm)",
+                        desc: "OpenAI'ın popüler yapay zeka dil modeli, geniş bilgi tabanı ve kolay kullanımıyla öne çıkar.",
+                        uses: ["Yazı yazma ve düzenleme yardımı", "Öğrenme ve eğitim desteği", "Beyin fırtınası ve fikir geliştirme"],
+                        ease: 90,
+                        quality: 85,
+                        speed: 80,
+                        custom: 65,
+                        advantage: "Daha detaylı ve kapsamlı yanıtlar, uzun sohbetlerde bağlam sürdürme.",
+                        comparison: "Güncel internet erişimi yok, ancak dil işleme ve yaratıcı görevlerde daha yetenekli."
                     }
                 },
                 highBudget: {
                     primary: {
-                        name: "Claude Pro",
-                        desc: "Anthropic'in gelişmiş AI asistanı, uzun sohbetler ve kapsamlı yardım sunar.",
-                        uses: ["Detaylı araştırma ve danışmanlık", "Proje planlaması", "Geniş içerik analizi"]
+                        name: "ChatGPT Plus (GPT-4)",
+                        desc: "OpenAI'ın premium yapay zeka asistanı, gelişmiş düşünme yetenekleri ve çoklu modlarıyla öne çıkar.",
+                        uses: ["Karmaşık sorular ve detaylı yanıtlar", "Yazma ve düzenleme", "Profesyonel tavsiye ve araştırma desteği"],
+                        ease: 90,
+                        quality: 95,
+                        speed: 90,
+                        custom: 85,
+                        matchReason: "Yüksek performans, çoklu mod özellikleri ve kişiselleştirilmiş GPT'ler.",
+                        techFit: "Kullanımı kolay, gelişmiş özellikler için minimal öğrenme eğrisi.",
+                        tips: ["GPT Store'daki özel asistanları keşfederek ihtiyaçlarınıza özel çözümler bulabilirsiniz.",
+                              "ChatGPT ile web gezinme özelliğini kullanarak güncel bilgilere erişebilirsiniz.",
+                              "Kendi dosyalarınızı yükleyerek belge analizi ve özetleme yapabilirsiniz."]
                     },
                     secondary: {
-                        name: "OpenAI ChatGPT Plus",
-                        desc: "GPT-4 destekli premium asistan, plugin entegrasyonu ile çok yönlü.",
-                        uses: ["Web araması ve taraması", "Özel araçlar ve eklentiler", "Görsel anlama"]
+                        name: "Claude Pro",
+                        desc: "Anthropic'in gelişmiş AI asistanı, uzun sohbetler ve ahlaki duyarlılık gerektiren konularda öne çıkar.",
+                        uses: ["Detaylı ve dengeli tartışmalar", "Uzun belgelerin analizi", "Nuanslı ve düşünceli yanıtlar"],
+                        ease: 85,
+                        quality: 95,
+                        speed: 85,
+                        custom: 80,
+                        advantage: "Uzun belge işlemede üstün, daha dengeli ve nüanslı yanıtlar.",
+                        comparison: "ChatGPT Plus kadar çok özelliği yok, ancak bazı metin görevlerinde daha iyi performans gösterir."
                     }
                 }
+                // Diğer bütçe seviyeleri...
             }
+            // Diğer kullanım alanları...
         };
-        
-        function selectOption(element, questionId, option) {
-            document.querySelectorAll(`#question${currentQuestion} .option`).forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            answers[questionId] = option;
-            document.getElementById('nextBtn').disabled = false;
-            updateProgressBar();
-        }
-        
-        function nextQuestion() {
-            if (currentQuestion < totalQuestions) {
-                document.getElementById(`question${currentQuestion}`).classList.remove('active');
-                currentQuestion++;
-                document.getElementById(`question${currentQuestion}`).classList.add('active');
-                document.getElementById('nextBtn').disabled = !answers[`q${currentQuestion}`];
-                if (currentQuestion === totalQuestions) {
-                    document.getElementById('nextBtn').textContent = 'Sonuçları Göster';
-                }
-            } else if (answers[`q${currentQuestion}`]) {
-                showResults();
-            }
-            document.getElementById('prevBtn').disabled = false;
-        }
-        
-        function prevQuestion() {
-            if (currentQuestion > 1) {
-                document.getElementById(`question${currentQuestion}`).classList.remove('active');
-                currentQuestion--;
-                document.getElementById(`question${currentQuestion}`).classList.add('active');
-                document.getElementById('prevBtn').disabled = currentQuestion === 1;
-                document.getElementById('nextBtn').textContent = 'Sonraki Soru';
-                document.getElementById('nextBtn').disabled = !answers[`q${currentQuestion}`];
-            }
-        }
-        
-        function updateProgressBar() {
-            const answeredQuestions = Object.keys(answers).length;
-            document.getElementById('progress').style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
-        }
-        
-        function showResults() {
-            for (let i = 1; i <= totalQuestions; i++) {
-                document.getElementById(`question${i}`).style.display = 'none';
-            }
-            document.querySelector('.btn-container').style.display = 'none';
+
+        // Hayali örnek: Tüm cevapları işle ve öneri göster
+        function processResults() {
+            let primaryArea = answers.q1;
+            let budget = answers.q4;
+            let budgetLevel = (budget === 'free' || budget === 'low') ? 'lowBudget' : 'highBudget';
             
-            // Bütçe durumunu belirle
-            const budgetLevel = ['free', 'low'].includes(answers.q4) ? 'lowBudget' : 'highBudget';
+            // Temel AI önerilerini ayarla
+            const recommendation = aiRecommendations[primaryArea][budgetLevel];
             
-            // Ana kategori önerisini al
-            const mainCategory = answers.q1;
-            const recommendations = aiRecommendations[mainCategory][budgetLevel];
+            // Birincil öneri
+            document.getElementById('primary-model').textContent = recommendation.primary.name;
+            document.getElementById('primary-description').textContent = recommendation.primary.desc;
+            document.getElementById('primary-match-reason').textContent = recommendation.primary.matchReason;
+            document.getElementById('primary-tech-fit').textContent = recommendation.primary.techFit;
             
-            // Sonuçları göster
-            document.getElementById('primary-model').textContent = recommendations.primary.name;
-            document.getElementById('primary-description').textContent = recommendations.primary.desc;
-            
-            document.getElementById('secondary-model').textContent = recommendations.secondary.name;
-            document.getElementById('secondary-description').textContent = recommendations.secondary.desc;
-            
-            // Kullanım önerilerini ekle
+            // Kullanım önerileri
             const primaryUsesList = document.getElementById('primary-uses');
             primaryUsesList.innerHTML = '';
-            recommendations.primary.uses.forEach(use => {
+            recommendation.primary.uses.forEach(use => {
                 const li = document.createElement('li');
                 li.textContent = use;
                 primaryUsesList.appendChild(li);
             });
             
+            // İpuçları
+            const primaryTipsList = document.getElementById('primary-tips');
+            primaryTipsList.innerHTML = '';
+            recommendation.primary.tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                primaryTipsList.appendChild(li);
+            });
+            
+            // Performans göstergeleri
+            document.getElementById('primary-ease').style.width = recommendation.primary.ease + '%';
+            document.getElementById('primary-quality').style.width = recommendation.primary.quality + '%';
+            document.getElementById('primary-speed').style.width = recommendation.primary.speed + '%';
+            document.getElementById('primary-custom').style.width = recommendation.primary.custom + '%';
+            
+            // İkincil öneri
+            document.getElementById('secondary-model').textContent = recommendation.secondary.name;
+            document.getElementById('secondary-description').textContent = recommendation.secondary.desc;
+            document.getElementById('secondary-advantage').textContent = recommendation.secondary.advantage;
+            document.getElementById('secondary-comparison').textContent = recommendation.secondary.comparison;
+            
+            // İkincil kullanım önerileri
             const secondaryUsesList = document.getElementById('secondary-uses');
             secondaryUsesList.innerHTML = '';
-            recommendations.secondary.uses.forEach(use => {
+            recommendation.secondary.uses.forEach(use => {
                 const li = document.createElement('li');
                 li.textContent = use;
                 secondaryUsesList.appendChild(li);
             });
             
+            // İkincil performans göstergeleri 
+            document.getElementById('secondary-ease').style.width = recommendation.secondary.ease + '%';
+            document.getElementById('secondary-quality').style.width = recommendation.secondary.quality + '%';
+            document.getElementById('secondary-speed').style.width = recommendation.secondary.speed + '%';
+            document.getElementById('secondary-custom').style.width = recommendation.secondary.custom + '%';
+            
+            // Sonuçları göster
             document.getElementById('result').style.display = 'block';
         }
-        
-        function restartTest() {
-            for (let key in answers) delete answers[key];
-            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-            document.getElementById('result').style.display = 'none';
+
+        // Seçenekleri işleme
+        function selectOption(element, questionId, value) {
+            // Varsa seçili sınıfı kaldır
+            const options = element.parentNode.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
             
-            currentQuestion = 1;
-            for (let i = 1; i <= totalQuestions; i++) {
-                document.getElementById(`question${i}`).style.display = 'none';
-                document.getElementById(`question${i}`).classList.remove('active');
-            }
+            // Seçilen öğeye seçili sınıfı ekle
+            element.classList.add('selected');
             
-            document.getElementById('question1').style.display = 'block';
-            document.getElementById('question1').classList.add('active');
-            document.querySelector('.btn-container').style.display = 'flex';
-            document.getElementById('nextBtn').disabled = true;
-            document.getElementById('nextBtn').textContent = 'Sonraki Soru';
-            document.getElementById('prevBtn').disabled = true;
-            document.getElementById('progress').style.width = '0%';
+            // Cevabı kaydet
+            answers[questionId] = value;
+            
+            // Sonraki butonu aktifleştir
+            document.getElementById('nextBtn').disabled = false;
+            
+            // Takip sorularını göster/gizle
+            handleFollowUpQuestions(questionId, value);
         }
         
-        window.onload = function() {
-            document.getElementById('prevBtn').disabled = true;
-            document.getElementById('nextBtn').disabled = true;
-        };
+        // Takip sorularını yönet
+        function handleFollowUpQuestions(questionId, value) {
+            // Önceki takip sorularını gizle
+            const followUps = document.querySelectorAll('.follow-up-question');
+            followUps.forEach(followUp => followUp.classList.add('hidden'));
+            
+            // İlgili takip sorusunu göster
+            if (questionId === 'q1') {
+                const followUpId = 'follow-up-' + value;
+                const followUpElement = document.getElementById(followUpId);
+                if (followUpElement) {
+                    followUpElement.classList.remove('hidden');
+                }
+            } else if (questionId === 'q2') {
+                document.getElementById('follow-up-expertise').classList.remove('hidden');
+            } else if (questionId === 'q3') {
+                document.getElementById('follow-up-usage').classList.remove('hidden');
+            } else if (questionId === 'q4') {
+                document.getElementById('follow-up-budget').classList.remove('hidden');
+            } else if (questionId === 'q5') {
+                document.getElementById('follow-up-purpose').classList.remove('hidden');
+            } else if (questionId === 'q6') {
+                document.getElementById('follow-up-device').classList.remove('hidden');
+            }
+        }
+        
+        // Tag seçim işlemi
+        function toggleTag(element, tagGroup, value) {
+            element.classList.toggle('selected');
+            
+            // Tag değerlerini kaydet
+            if (!followUpAnswers[tagGroup]) {
+                followUpAnswers[tagGroup] = [];
+            }
+            
+            if (element.classList.contains('selected')) {
+                // Eğer seçiliyse ve listede yoksa ekle
+                if (!followUpAnswers[tagGroup].includes(value)) {
+                    followUpAnswers[tagGroup].push(value);
+                }
+            } else {
+                // Seçili değilse ve listede varsa çıkar
+                followUpAnswers[tagGroup] = followUpAnswers[tagGroup].filter(item => item !== value);
+            }
+            
+            console.log(followUpAnswers);
+        }
+
+        // Önceki soruya git
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                // Mevcut soruyu gizle
+                document.getElementById('question' + currentQuestion).classList.remove('active');
+                currentQuestion--;
+                // Önceki soruyu göster
+                document.getElementById('question' + currentQuestion).classList.add('active');
+                // İlerleme çubuğunu güncelle
+                updateProgressBar();
+                // İlk soru ise önceki düğmesini devre dışı bırak
+                if (currentQuestion === 1) {
+                    document.getElementById('prevBtn').disabled = true;
+                }
+                // Sonraki düğmesini etkinleştir
+                document.getElementById('nextBtn').disabled = false;
+                document.getElementById('nextBtn').textContent = 'Sonraki Soru';
+            }
+        }
+
+        // Sonraki soruya git
+        function nextQuestion() {
+            const currentActiveQuestion = document.getElementById('question' + currentQuestion);
+            const options = currentActiveQuestion.querySelectorAll('.option.selected');
+            
+            // Eğer geçerli soruda bir seçenek seçilmemişse ilerlemesine izin verme
+            if (options.length === 0) {
+                return;
+            }
+            
+            // Takip sorusu bilgilerini kaydet
+            saveFollowUpData();
+            
+            if (currentQuestion < totalBaseQuestions) {
+                // Mevcut soruyu gizle
+                currentActiveQuestion.classList.remove('active');
+                currentQuestion++;
+                // Sonraki soruyu göster
+                document.getElementById('question' + currentQuestion).classList.add('active');
+                // İlerleme çubuğunu güncelle
+                updateProgressBar();
+                // Önceki düğmesini etkinleştir
+                document.getElementById('prevBtn').disabled = false;
+                // Son soru ise sonraki düğmesinin metnini değiştir
+                if (currentQuestion === totalBaseQuestions) {
+                    document.getElementById('nextBtn').textContent = 'Sonuçları Göster';
+                }
+                // Yeni sorudaki seçimleri kontrol et
+                const newOptions = document.getElementById('question' + currentQuestion).querySelectorAll('.option.selected');
+                document.getElementById('nextBtn').disabled = newOptions.length === 0;
+            } else {
+                // Tüm soruları tamamladık, sonuçları göster
+                document.getElementById('question' + currentQuestion).classList.remove('active');
+                // İlerleme çubuğunu tamamla
+                document.getElementById('progress').style.width = '100%';
+                // Sonuçları işle ve göster
+                processResults();
+                // Düğmeleri gizle
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('prevBtn').style.display = 'none';
+            }
+        }
+        
+        // Takip sorusu verilerini kaydet
+        function saveFollowUpData() {
+            if (currentQuestion === 1) {
+                const area = answers.q1;
+                if (area) {
+                    // Açık metin alanlarını kontrol et
+                    const textareaId = area + '-details';
+                    const textarea = document.getElementById(textareaId);
+                    if (textarea && textarea.value) {
+                        followUpAnswers[area + '-details'] = textarea.value;
+                    }
+                }
+            } else if (currentQuestion === 2) {
+                // Teknik rahatlık seviyesi
+                const technicalComfort = document.getElementById('technical-comfort');
+if (technicalComfort) {
+    followUpAnswers['technical-comfort'] = technicalComfort.value;
+}
+const expertiseDetails = document.getElementById('expertise-details');
+if (expertiseDetails && expertiseDetails.value) {
+    followUpAnswers['expertise-details'] = expertiseDetails.value;
+}
+} else if (currentQuestion === 3) {
+    const usageDetails = document.getElementById('usage-details');
+    if (usageDetails && usageDetails.value) {
+        followUpAnswers['usage-details'] = usageDetails.value;
+    }
+} else if (currentQuestion === 4) {
+    const budgetDetails = document.getElementById('budget-details');
+    if (budgetDetails && budgetDetails.value) {
+        followUpAnswers['budget-details'] = budgetDetails.value;
+    }
+} else if (currentQuestion === 5) {
+    const purposeDetails = document.getElementById('purpose-details');
+    if (purposeDetails && purposeDetails.value) {
+        followUpAnswers['purpose-details'] = purposeDetails.value;
+    }
+} else if (currentQuestion === 6) {
+    const deviceDetails = document.getElementById('device-details');
+    if (deviceDetails && deviceDetails.value) {
+        followUpAnswers['device-details'] = deviceDetails.value;
+    }
+}
+}
+
+// İlerleme çubuğunu güncelle
+function updateProgressBar() {
+    const progress = ((currentQuestion - 1) / totalBaseQuestions) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+}
+
+// Testi yeniden başlat
+function restartTest() {
+    // Tüm cevapları sıfırla
+    for (let key in answers) delete answers[key];
+    for (let key in followUpAnswers) delete followUpAnswers[key];
+    // Tüm soruları gizle
+    for (let i = 1; i <= totalBaseQuestions; i++) {
+        document.getElementById('question' + i).classList.remove('active');
+        // Seçili seçenekleri kaldır
+        const options = document.getElementById('question' + i).querySelectorAll('.option.selected');
+        options.forEach(option => option.classList.remove('selected'));
+        // Takip sorularını gizle ve alanları temizle
+        const followUps = document.getElementById('question' + i).querySelectorAll('.follow-up-question');
+        followUps.forEach(fu => {
+            fu.classList.add('hidden');
+            const tags = fu.querySelectorAll('.tag.selected');
+            tags.forEach(tag => tag.classList.remove('selected'));
+            const textarea = fu.querySelector('textarea');
+            if (textarea) textarea.value = '';
+            const range = fu.querySelector('input[type="range"]');
+            if (range) range.value = 3;
+        });
+    }
+    // Sonuçları gizle
+    document.getElementById('result').style.display = 'none';
+    // İlk soruyu göster
+    currentQuestion = 1;
+    document.getElementById('question1').classList.add('active');
+    // Düğmeleri sıfırla
+    document.getElementById('prevBtn').disabled = true;
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').style.display = 'inline-block';
+    document.getElementById('prevBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').textContent = 'Sonraki Soru';
+    // İlerleme çubuğunu sıfırla
+    document.getElementById('progress').style.width = '0%';
+}
     </script>
 </body>
 </html>
